@@ -1,16 +1,28 @@
-// https://www.youtube.com/watch?v=-gHHcv3Xy9s
 var app = angular.module("app",["ngRoute"]);
 
-app.config(function($stateProvider, $urlRouterProvider) {
-    $stateProvider
-        .state("login", {
-           url: "/login", 
+app.config(function($httpProvider,$routeProvider) {
+    $httpProvider.defaults.useXDomain = true
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    $routeProvider
+        .when("/login", {
            templateUrl: "templates/login.html",
-           controller: "LoginCOntroller"
+           controller: "LoginController"
         })
-        .state("secure", {
-            url: "/secure",
-            templateUrl: "templates/secure.html",
-            controller: "SecureController",
-        });
+        .when("/admin", {
+            templateUrl: "templates/admin.html",
+            controller: "AdminController",
+        })
+        .otherwise({redirectTo:'/login'});
+});
+
+app.controller("AppController", function($scope, USER_ROLES, AuthService) {
+   
+   $scope.currentUser = null;
+   $scope.userRoles = USER_ROLES;
+   $scope.isAuthorized = AuthService.isAuthorized;
+   
+   $scope.setCurrentUser = function(user) {
+       $scope.currentUser = user;
+   }
+   
 });

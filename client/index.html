@@ -7,8 +7,21 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.js"></script>
         <script src="js/app.js"></script>
+        
+        <!--CONSTANTS-->
+        <script src="js/constants/AuthEventsConstants.js"></script>
+        <script src="js/constants/UserRolesConstants.js"></script>
+        
+        <!--CONTROLLERS-->
+        <script src="js/controllers/AdminController.js"></script>
+        <script src="js/controllers/LoginController.js"></script>
+        
+        <!--SERVICES-->
+        <script src="js/services/SessionService.js"></script>
+        <script src="js/services/AuthService.js"></script>
+        
     </head>
-    <body ng-app="app">
-        <div ui-view></div>
+    <body ng-app="app" ng-controller="AppController">
+        <div ng-view></div>
     </body>
 </html>
