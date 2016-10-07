@@ -1,4 +1,4 @@
-app.factory('OAuth2Service', function($http, SessionService) {
+app.factory('OAuth2Service', function($http, $sessionStorage, SessionService) {
    
     var authService = {};
     
@@ -9,17 +9,18 @@ app.factory('OAuth2Service', function($http, SessionService) {
                 username:credentials.username,
                 password:credentials.password,
             }).then(function (res) {
-                 SessionService.create(res.data.access_token);
+                 $sessionStorage.accessToken = res.data.access_token;
                  return authService.getAuthenticatedUser();
             }, function () {
             });
     };
     
     authService.getAuthenticatedUser = function() {
-        return $http({method: 'GET', url: 'http://cms.server', headers: {
-            Authorization: 'Bearer ' + SessionService.accessToken
+        return $http({method: 'GET', url: 'http://cms.server/user', headers: {
+            Authorization: 'Bearer ' + $sessionStorage.accessToken
         }}).then(function(res) {
-            SessionService.setUser(res);
+            console.log(res.data);
+            SessionService.create(res.data);
             return res;
         });
     }
@@ -28,15 +29,13 @@ app.factory('OAuth2Service', function($http, SessionService) {
         return !!SessionService.accessToken;
     }
     
-    authService.isAuthorized = function(authorizedRoles) {
-        
+    authService.isAuthorized = function(authorizedRoles) {    
         if (!angular.isArray(authorizedRoles)) {
             authorizedRoles = [authorizedRoles];
         }
         return (authService.isAuthenticated() &&
                 authorizedRoles.indexOf(SessionService.user.role) !== -1);
     }
-        
     return authService;
     
 });

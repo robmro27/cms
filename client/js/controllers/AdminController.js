@@ -1,7 +1,9 @@
-app.controller("AdminController", function($http) {
-    $http.get('http://cms.server/')
+app.controller("AdminController", function($http, $sessionStorage) {
+    $http({method: 'GET', url: 'http://cms.server', headers: {
+            Authorization: 'Bearer ' + $sessionStorage.accessToken
+    }})
     .then(function (response) {
-        console.log(response);
+        
     }, function () {
        ;
     });
