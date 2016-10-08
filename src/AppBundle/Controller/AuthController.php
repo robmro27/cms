@@ -13,9 +13,10 @@ class AuthController extends FOSRestController
     /**
      * @Rest\View
      */
-    public function getUserAction(Request $request)
+    public function getAuthUserAction(Request $request)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        return ['user' => $user];
+        /* @var $user \AppBundle\Entity\User */
+        return ['user' => $user, 'roles' => $user->getRoles()];
     }
 }

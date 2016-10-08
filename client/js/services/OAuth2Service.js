@@ -10,31 +10,39 @@ app.factory('OAuth2Service', function($http, $sessionStorage, SessionService) {
                 password:credentials.password,
             }).then(function (res) {
                  $sessionStorage.accessToken = res.data.access_token;
-                 return authService.getAuthenticatedUser();
+                 authService.getAuthenticatedUser();
             }, function () {
             });
     };
     
     authService.getAuthenticatedUser = function() {
-        return $http({method: 'GET', url: 'http://cms.server/user', headers: {
+        return $http({method: 'GET', url: 'http://cms.server/auth/user', headers: {
             Authorization: 'Bearer ' + $sessionStorage.accessToken
         }}).then(function(res) {
-            console.log(res.data);
             SessionService.create(res.data);
-            return res;
+            return res.data;
         });
     }
     
     authService.isAuthenticated = function() {
-        return !!SessionService.accessToken;
+        return !!$sessionStorage.accessToken;
     }
     
     authService.isAuthorized = function(authorizedRoles) {    
+        
         if (!angular.isArray(authorizedRoles)) {
             authorizedRoles = [authorizedRoles];
         }
-        return (authService.isAuthenticated() &&
-                authorizedRoles.indexOf(SessionService.user.role) !== -1);
+        
+        if (SessionService.user) {
+            for (var i = 0; i <= SessionService.user['roles'].length; i++) {
+                if (authService.isAuthenticated() &&
+                    authorizedRoles.indexOf(SessionService.user['roles'][i]) !== -1) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     return authService;
     

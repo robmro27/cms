@@ -1,6 +1,6 @@
 app.constant('USER_ROLES', {
-   user: 'user',
-   admin: 'admin',
+   ROLE_USER: 'ROLE_USER',
+   ROLE_ADMIN: 'ROLE_ADMIN',
 });
 
 

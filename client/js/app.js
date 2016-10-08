@@ -15,16 +15,14 @@ app.config(function($httpProvider,$routeProvider) {
         .otherwise({redirectTo:'/login'});
 });
 
-app.controller("AppController", function($scope, USER_ROLES, OAuth2Service) {
-   
-   $scope.currentUser = null;
-   $scope.userRoles = USER_ROLES;
-   $scope.isAuthorized = OAuth2Service.isAuthorized;
-   
-   OAuth2Service.getAuthenticatedUser();
-   
-   $scope.setCurrentUser = function(user) {
-       $scope.currentUser = user;
-   }
-   
+app.run(function(OAuth2Service, $rootScope, USER_ROLES) {
+   OAuth2Service.getAuthenticatedUser().then(function(user) {
+       $rootScope.currentUser = user;
+       $rootScope.userRoles = USER_ROLES;
+       $rootScope.isAuthorized = OAuth2Service.isAuthorized;
+   });
+});
+
+app.controller("AppController", function() {
+    ;
 });

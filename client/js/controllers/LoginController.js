@@ -6,11 +6,9 @@ app.controller("LoginController", function($scope, $rootScope, OAuth2Service, AU
     }
     
     $scope.signIn = function(credentials) {
-        
         OAuth2Service.signIn(credentials)
-        .then(function(user) {
+        .then(function() {
             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-            $scope.setCurrentUser(user); // from AppController
         })
         .then(function() {
             $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
