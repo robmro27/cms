@@ -5,8 +5,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
+        <script src="//unpkg.com/angular-ui-router/release/angular-ui-router.min.js"></script>
         <script src="js/app.js"></script>
         
         <!--CONSTANTS-->
@@ -20,9 +20,10 @@
         <!--SERVICES-->
         <script src="js/services/SessionService.js"></script>
         <script src="js/services/OAuth2Service.js"></script>
+        <script src="js/services/AuthResolver.js"></script>
         
     </head>
     <body ng-app="app" ng-controller="AppController">
-        <div ng-view></div>
+        <div ui-view></div>
     </body>
 </html>

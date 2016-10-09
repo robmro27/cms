@@ -10,7 +10,7 @@ app.factory('OAuth2Service', function($http, $sessionStorage, SessionService) {
                 password:credentials.password,
             }).then(function (res) {
                  $sessionStorage.accessToken = res.data.access_token;
-                 authService.getAuthenticatedUser();
+                 return authService.getAuthenticatedUser();
             }, function () {
             });
     };
@@ -25,7 +25,7 @@ app.factory('OAuth2Service', function($http, $sessionStorage, SessionService) {
     }
     
     authService.isAuthenticated = function() {
-        return !!$sessionStorage.accessToken;
+        return !!SessionService.user;
     }
     
     authService.isAuthorized = function(authorizedRoles) {    
@@ -34,16 +34,15 @@ app.factory('OAuth2Service', function($http, $sessionStorage, SessionService) {
             authorizedRoles = [authorizedRoles];
         }
         
-        if (SessionService.user) {
+        if (authService.isAuthenticated()) {
             for (var i = 0; i <= SessionService.user['roles'].length; i++) {
-                if (authService.isAuthenticated() &&
-                    authorizedRoles.indexOf(SessionService.user['roles'][i]) !== -1) {
+                if (authorizedRoles.indexOf(SessionService.user['roles'][i]) !== -1) {
                     return true;
                 }
             }
         }
+        
         return false;
     }
     return authService;
-    
 });
