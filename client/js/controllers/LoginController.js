@@ -1,4 +1,4 @@
-app.controller("LoginController", function($scope, $rootScope, $state, $q, OAuth2Service, AUTH_EVENTS) {
+app.controller("LoginController", function($scope, $rootScope, $state, OAuth2Service, AUTH_EVENTS) {
 
     $scope.credentials = {
         username:'',
