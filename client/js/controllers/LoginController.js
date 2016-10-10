@@ -18,7 +18,6 @@ app.controller("LoginController", function($scope, $rootScope, $state, $q, OAuth
     
     $scope.$on(AUTH_EVENTS.loginFailed, function() {
         $scope.errMsg = 'Invalid credentials';
-        console.log('login failed'); 
     });
     
 });
