@@ -6,11 +6,12 @@ app.factory('AuthResolver', function($q, $rootScope, $state, OAuth2Service, AUTH
                 $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, user);
                 if (authorizedRoles.length && !OAuth2Service.isAuthorized(authorizedRoles)) {
                     $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
+                    defer.reject();
                 }
                 defer.resolve();
             }, function() {
                 defer.reject();
-                $state.go('login');
+                $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
             });
             return defer.promise;
        }

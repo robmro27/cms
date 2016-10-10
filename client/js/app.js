@@ -1,6 +1,14 @@
 var app = angular.module("app",["ui.router","ngStorage"]);
 
 app.config(function($httpProvider,$stateProvider, $urlRouterProvider, USER_ROLES) {
+    
+    $httpProvider.interceptors.push([
+        '$injector',
+        function($injector) {
+            return $injector.get('AuthInterceptor');
+        }
+    ]);
+    
     $httpProvider.defaults.useXDomain = true
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
     
@@ -28,14 +36,31 @@ app.config(function($httpProvider,$stateProvider, $urlRouterProvider, USER_ROLES
         ;
 });
 
-app.run(function(OAuth2Service, $rootScope, USER_ROLES, AUTH_EVENTS) {
+app.run(function(OAuth2Service, $rootScope, $state, USER_ROLES, AUTH_EVENTS) {
     
-   $rootScope.currentUser = null; 
-   $rootScope.userRoles = USER_ROLES;
-   $rootScope.isAuthorized = OAuth2Service.isAuthorized;
+    $rootScope.currentUser = null; 
+    $rootScope.userRoles = USER_ROLES;
+    $rootScope.isAuthorized = OAuth2Service.isAuthorized;
    
-   $rootScope.$on(AUTH_EVENTS.loginSuccess, function (event, user) {
+    $rootScope.$on(AUTH_EVENTS.loginSuccess, function (event, user) {
+        console.log('loginSuccess');
         $rootScope.currentUser = user;
+    });
+    
+    $rootScope.$on(AUTH_EVENTS.notAuthenticated, function (event, user) {
+        console.log('notAuthenticated');
+        $state.go('login');
+    });
+    
+    $rootScope.$on(AUTH_EVENTS.notAuthorized, function (event, user) {
+        console.log('notAuthorized');
+        OAuth2Service.getRefreshToken();
+        
+    });
+    
+    $rootScope.$on(AUTH_EVENTS.sessionTimeout, function (event, user) {
+        console.log('sessionTimeout');
+        OAuth2Service.getRefreshToken();
     });
     
 });

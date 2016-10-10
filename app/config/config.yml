@@ -97,8 +97,8 @@ fos_oauth_server:
     service:
         user_provider: fos_user.user_manager             # This property will be used when valid credentials are given to load the user upon access token creation
         options:
-            access_token_lifetime: 60
-            refresh_token_lifetime: 60
+            access_token_lifetime: 3600
+            refresh_token_lifetime: 3600
         
 nelmio_cors:
     paths:

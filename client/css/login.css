@@ -1,0 +1,13 @@
+.login-container {
+    margin: 0 auto;
+    width: 25%;
+    position: relative;
+    margin-top: 20%;
+}
+.login-container h2 {
+    text-align: center;
+    color: #419641;
+    font-size: 48px;
+    font-weight: bold;
+    font-style: italic;
+}

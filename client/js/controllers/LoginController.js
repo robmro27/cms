@@ -1,5 +1,5 @@
-app.controller("LoginController", function($scope, $rootScope, $state, OAuth2Service, AUTH_EVENTS) {
-    
+app.controller("LoginController", function($scope, $rootScope, $state, $q, OAuth2Service, AUTH_EVENTS) {
+
     $scope.credentials = {
         username:'',
         password:'',
@@ -7,12 +7,18 @@ app.controller("LoginController", function($scope, $rootScope, $state, OAuth2Ser
     
     $scope.signIn = function(credentials) {
         OAuth2Service.signIn(credentials)
-        .then(function(user) {
+        .then(
+          function(user) {
             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, user);
             $state.go('admin');
-        })
-        .then(function() {
+        },function() {
             $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
         });
     }
+    
+    $scope.$on(AUTH_EVENTS.loginFailed, function() {
+        $scope.errMsg = 'Invalid credentials';
+        console.log('login failed'); 
+    });
+    
 });
